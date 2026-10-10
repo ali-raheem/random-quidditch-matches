@@ -1,6 +1,6 @@
 {
   "name": "random-quidditch-matches",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "type": "module",
   "description": "Endless procedurally generated Quidditch matches, installable as an offline PWA.",
