@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Random Quidditch Matches: an endless, hands-off procedurally generated Quidditch broadcast under the full rules, shipped as an offline PWA. There is no build step and there are no dependencies. The code is plain ES modules loaded straight from `index.html`. It shares its app shell with Random Space Battles (`../RSB`) and Random Medieval Battles (`../RMB`): the `app.js` loop, panels, `recent.js`, `sw.js` and `bump.mjs` are structurally the same.
 
-(The parent `../CLAUDE.md` describes an unrelated Rust/Fallout project. Ignore it here.)
+(The parent `../CLAUDE.md` describes the shoryuken.me workspace and its shared-origin rules; the one above that, `~/Workspace/CLAUDE.md`, is an unrelated Rust/Fallout project. Ignore that one here.)
 
 ## Commands
 
@@ -50,8 +50,16 @@ A match is fully determined by its seed. Reloading the `#seed=` URL has to repla
 ## Conventions and gotchas
 
 - **Adding or renaming a file:** add it to `ASSETS` in `sw.js` (`tests/assets.test.mjs` fails otherwise). The cache name comes from `VERSION`, because app.js registers `sw.js?v=<VERSION>`, so run `npm run bump` to force installed copies onto a clean cache.
-- **Shared origin:** this app is meant to live on shoryuken.me next to other PWAs (`/rsb/`, `/rmb/` and more). That's why the manifest `id` is `/rqm/index.html` (never change it once installs exist), `localStorage` keys use the `rqm.` prefix, and `sw.js` deletes only caches with its own `rqm-` prefix. All paths are relative, so it works from any subdirectory.
+- **Shared origin:** this app is meant to live on shoryuken.me next to other PWAs (`/rsb/`, `/rmb/` and more). That's why the manifest `id` is `/rqm/index.html` (never change it once installs exist), `localStorage` keys use the `rqm.` prefix, and `sw.js` deletes only caches with its own `rqm-` prefix. Also, `sw.js` handles only requests inside `self.registration.scope`, reads and writes only its own cache (`caches.open(CACHE_NAME)`, never `caches.match()`, which searches every app's caches), precaches with `cache: 'reload'` and fetches with `cache: 'no-cache'` so Cloudflare's 4 h max-age on JS/CSS can't serve stale code after a deploy. All paths are relative, so it works from any subdirectory.
 - **Icons:** the UI uses the inline SVG sprite at the top of `index.html` (24×24 `<symbol id="i-…">`, stroked in `currentColor`). Don't use emoji. The PNG app icons are rendered from `icons/icon.svg` with ImageMagick (`convert -background none -density 384 …`), whose SVG renderer ignores `clipPath`, so keep that file clip-free.
 - **Touch:** the HUD fades when idle, and the click after a tap that wakes it is swallowed on purpose. Keep control-bar buttons at 38 px or more, and keep the bar within 288 px so it fits on a 320 px phone.
 - **Tuning pacing:** match length is mostly `SPOT_RATE`, the `pace` ramp and the opening `blindUntil` in `thinkSeeker()`, plus the Snitch's flee speed and `energy` drain in `updateSnitch()` and the catch chance. Goals are shot speed in `shoot()` versus the Keeper's reaction and dive speed in `keeperReact()` and their reach in `updateQuaffle()`. Knockouts are `KO_BASE` in `bonk()`. Foul rates are spread through `tackle()`, `support()` (stooging lapses), `beaterHit()` (bumphing), `updateQuaffle()` (flacking), `shoot()` (haversacking, Quaffle-pocking) and `updateSnitch()` (snitchnip).
 - For balance work, a scratch script that runs ~60 seeds and prints match-length percentiles, goals, saves, fouls by type and knockouts is more informative than the tests. Current targets: median match about 4–5 minutes, p90 under 10, a handful of goals each way, keepers saving roughly half the shots, about 2 fouls and at most about 1 knockout a match, and almost no matches ending by consent.
+
+## Deployment
+
+Live at https://shoryuken.me/rqm/ (`/var/www/shoryuken.me/rqm/`; see the server's `/var/www/shoryuken.me/CLAUDE.md`). After `npm test` and `npm run bump`, ship only the served files:
+
+```bash
+rsync -a --delete --chmod=D755,F644 index.html manifest.webmanifest sw.js css js icons root@185.163.204.17:/var/www/shoryuken.me/rqm/
+```
