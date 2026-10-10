@@ -58,7 +58,7 @@ A match is fully determined by its seed. Reloading the `#seed=` URL has to repla
 
 ## Deployment
 
-Live at https://shoryuken.me/rqm/ (`/var/www/shoryuken.me/rqm/`; see the server's `/var/www/shoryuken.me/CLAUDE.md`). After `npm test` and `npm run bump`, ship only the served files:
+Live at https://shoryuken.me/rqm/ (`/var/www/shoryuken.me/rqm/`; server conventions are in `../CLAUDE.md`). After `npm test` and `npm run bump`, ship only the served files:
 
 ```bash
 rsync -a --delete --chmod=D755,F644 index.html manifest.webmanifest sw.js css js icons root@185.163.204.17:/var/www/shoryuken.me/rqm/
