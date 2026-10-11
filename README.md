@@ -124,3 +124,7 @@ its cache after it, so installed copies pick up a clean cache on their next visi
 ```bash
 npm test
 ```
+
+## Licence
+
+[MIT](LICENSE) © 2026 Ali Raheem.
