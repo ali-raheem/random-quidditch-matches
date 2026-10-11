@@ -1,5 +1,14 @@
 # Random Quidditch Matches
 
+[![CI](https://github.com/ali-raheem/random-quidditch-matches/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-raheem/random-quidditch-matches/actions/workflows/ci.yml) [![GitHub Pages](https://github.com/ali-raheem/random-quidditch-matches/actions/workflows/pages.yml/badge.svg)](https://github.com/ali-raheem/random-quidditch-matches/actions/workflows/pages.yml)
+
+**▶ Try it live: [shoryuken.me/rqm](https://shoryuken.me/rqm/)** · mirror on [GitHub Pages](https://ali-raheem.github.io/random-quidditch-matches/) · installable, works offline
+
+<p align="center">
+  <a href="https://shoryuken.me/rqm/"><img src="docs/screenshots/desktop.webp" alt="Random Quidditch Matches on a desktop browser" width="74%"></a>
+  <a href="https://shoryuken.me/rqm/"><img src="docs/screenshots/mobile.webp" alt="Random Quidditch Matches on a phone" width="22%"></a>
+</p>
+
 An endless, hands-off Quidditch broadcast. Each match pits two procedurally generated
 clubs against each other under the full rules: Chasers, Keepers, Beaters and Seekers,
 the Quaffle, two Bludgers and the Golden Snitch, fouls and penalties, time-outs and no
